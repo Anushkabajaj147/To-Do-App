@@ -1,4 +1,4 @@
-import { View, Text,Dimensions, TouchableOpacity,Button,Platform } from 'react-native';
+import { View, Text,Dimensions, TouchableOpacity,Button,Platform,SafeAreaView} from 'react-native';
 import React, { useState } from 'react';
 import Icons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -22,18 +22,18 @@ const EditableScreen = () => {
   const onChange = (event:any, selectedDate:Date) => {
     
     // console.log('event', Date(event.nativeEvent.timestamp));
-    console.log('event',event.type==="dismissed"); 
+    // console.log('event',event.type==="dismissed"); 
     if ( event.type==="set" && selectedDate) {  
       setDate(selectedDate);
-      console.log('selectedDate',selectedDate);  //specify time in universal time 
-      console.log('event',event); //specify timestamp means timing in millieseconds when we use date object which specify actual date and time 
+      // console.log('selectedDate',selectedDate);  //specify time in universal time 
+      // console.log('event',event); //specify timestamp means timing in millieseconds when we use date object which specify actual date and time 
       if(mode==="date")
       {setAdjustDate(selectedDate.toLocaleDateString());
-        console.log('adjustdate',adjustDate);
+        // console.log('adjustdate',adjustDate);
       }
       else
     {  setAdjustTime(selectedDate.toLocaleTimeString());
-      console.log('adjust time',adjustTime);
+      // console.log('adjust time',adjustTime);
     }
      
     }
@@ -66,6 +66,7 @@ const EditableScreen = () => {
           setError(false);
          
           try{
+            console.log('in try block');
             let response=await fetch('http://10.0.2.2:3000/api/todo',{
             method:'POST',
             headers:{
@@ -73,6 +74,7 @@ const EditableScreen = () => {
             },
             body:JSON.stringify({title:title,description:desc,date:adjustDate,time:adjustTime}),
             });
+            console.log('response',response.status);
             if(response.ok)
             {
               let data=await response.json();
@@ -88,12 +90,15 @@ const EditableScreen = () => {
           catch(err){
             if(err)
             {
-              console.log('In Catch ',err);
+               console.log(' in catch error occur while getting response from server',data);
+              console.log(' in catch error occur while getting response from server',response.status);
+              console.log('In Catch  of edit screen',err);
             }
           }
         }
     };
     return (
+      <SafeAreaView style={{flex:1}} edges={Platform.OS==='ios'?['top','bottom']:[]}>
     <View style={{flex:1,backgroundColor:'#f0f8ff'}}> 
     <View style={{borderWidth:1,borderColor:'transparent',height:height*0.30,width:width,borderBottomLeftRadius:15,borderBottomRightRadius:15,backgroundColor:'rgb(74, 55, 128)'}}>
     <View style={{borderWidth:1,borderColor:'transparent',height:height*0.05,width:width,flexDirection:'row',alignContent:'center',alignItems:'center',alignSelf:'flex-start'}} >
@@ -144,7 +149,7 @@ const EditableScreen = () => {
        </View>
        </View>
        </View>
-<View style={{borderWidth:1,position:'absolute'}}>
+<View style={{borderWidth:0.2,position:'absolute',top:height*0.20,left:'5%',backgroundColor:'rgba(237, 228, 237, 1)'}}>
       {show && (
         <DateTimePicker
           value={date}
@@ -179,6 +184,7 @@ const EditableScreen = () => {
       </View>
       </View>)}
     </View>
+  </SafeAreaView>
   );
 };
 

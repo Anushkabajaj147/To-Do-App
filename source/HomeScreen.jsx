@@ -1,4 +1,4 @@
-import { View, Text,Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text,Dimensions, TouchableOpacity, ScrollView,SafeAreaView,platform } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -28,6 +28,8 @@ const[completedTodoDeleted,setCompletedTodoDeleted]=useState(true);
     const fetchData=async()=>{
     let renderData=true;
     try{
+      console.log('in try todo');
+      console.log('todo data=',renderItems);
       if(!renderItems || renderItems.length===0)
         {
           console.log('data is not fetch now');
@@ -310,6 +312,7 @@ useEffect(()=>{
 
 
   return (
+    <SafeAreaView style={{flex:1}} edges={Platform.OS==='ios'?['top','bottom']:[]}>
     <View style={{flex:1,backgroundColor:'rgb(74, 55, 128)'}}>
       <View style={{height:height*0.06,width:width,borderWidth:0.5,backgroundColor:'#f0f8ff',borderBottomRightRadius:10,borderBottomLeftRadius:10,alignSelf:'center',alignContent:'center',alignItems:'center',justifyContent:'center',flexDirection:'row',elevation:24}}>
      
@@ -437,11 +440,11 @@ useEffect(()=>{
                   </TouchableOpacity>
                   </View>):null
               } */}
-      <TouchableOpacity onPress={()=>Navigation.navigate('EditScreen')} activeOpacity={0.7} style={{borderWidth:1,height:height*0.055,width:width-360,alignContent:'center',alignItems:'center',alignSelf:'flex-end',justifyContent:'center',right:'2%',borderRadius:20,bottom:'1%',position:'absolute',backgroundColor:'#fff',borderColor:'rgb(252, 252, 250)'}}>
+      <TouchableOpacity onPress={()=>Navigation.navigate('EditScreen')} activeOpacity={0.7} style={{borderWidth:1,height:height*0.055,width:width-360,alignContent:'center',alignItems:'center',alignSelf:'flex-end',justifyContent:'center',right:'5%',borderRadius:20,bottom:'2%',position:'absolute',backgroundColor:'#fff',borderColor:'rgb(252, 252, 250)'}}>
         <Icons name='plus'size={26} color={'#000'} />
       </TouchableOpacity>
     </View>
-  
+  </SafeAreaView>
   );
 };
 
